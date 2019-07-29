@@ -1,17 +1,23 @@
-$('.images>img:nth-child(1)').addClass('current')
-$('.images>img:nth-child(n+2)').addClass('enter')
-let n = 1
+let n 
+initialization()
+
 setInterval(() => {
-    $(`.images>img:nth-child(${count(n)})`).removeClass('current').addClass('leave')
+    makeLeave(getImage(n))
     .one('transitionend',(e) => {
-        $(e.currentTarget).removeClass('leave').addClass('enter')
+        makeEnter($(e.currentTarget))
     })
-    $(`.images>img:nth-child(${count(n+1)})`).removeClass('enter').addClass('current')
+    makeCurrent(getImage(n+1))
     n += 1
-},1000)
+},3000)
 
 
 
+//函数区
+function initialization(){
+    n=1
+    $(`.images>img:nth-child(${n})`).addClass('current')
+    .siblings().addClass('enter')
+}
 function count(n){
     if(n>5){
         n = n%5
@@ -21,9 +27,19 @@ function count(n){
     }
     return n
 }
-
-
-
+function makeCurrent($node){
+    $node.removeClass('enter leave').addClass('current')
+}
+function makeLeave($node){
+    $node.removeClass('enter current').addClass('leave')
+    return $node
+}
+function makeEnter($node){
+    $node.removeClass('current leave').addClass('enter')
+}
+function getImage(n){
+    return $(`.images>img:nth-child(${count(n)})`)
+}
 
 
 
